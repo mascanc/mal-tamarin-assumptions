@@ -1,0 +1,177 @@
+{
+    "metadata": {
+        "name": "archi_cloud",
+        "langVersion": "1.0.0",
+        "langID": "org.mal-lang.coreLang",
+        "malVersion": "0.1.0-SNAPSHOT",
+        "MAL-Toolbox Version": "0.3.11",
+        "info": "Created by the mal-toolbox model python module."
+    },
+    "assets": {
+        "0": {
+            "name": "PLC",
+            "type": "Hardware",
+            "associated_assets": {
+                "sysExecutedApps": {
+                    "2": "PLC Interface"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -599.0,
+                    "y": 337.0
+                }
+            }
+        },
+        "2": {
+            "name": "PLC Interface",
+            "type": "Application",
+            "associated_assets": {
+                "hostHardware": {
+                    "0": "PLC"
+                },
+                "networks": {
+                    "6": "Cloud"
+                },
+                "appConnections": {
+                    "7": "ActivatePumpMessage",
+                    "18": "CloudConnection"
+                },
+                "receivedData": {
+                    "8": "ActivatePump"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -599.0,
+                    "y": 206.0
+                }
+            }
+        },
+        "4": {
+            "name": "SCADA",
+            "type": "Application",
+            "associated_assets": {
+                "networks": {
+                    "6": "Cloud"
+                },
+                "appConnections": {
+                    "7": "ActivatePumpMessage",
+                    "18": "CloudConnection"
+                },
+                "vulnerabilities": {
+                    "11": "SCADACVE"
+                },
+                "sentData": {
+                    "8": "ActivatePump"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -609.4221300021514,
+                    "y": -421.90762846302795
+                }
+            }
+        },
+        "6": {
+            "name": "Cloud",
+            "type": "Network",
+            "associated_assets": {
+                "applications": {
+                    "4": "SCADA",
+                    "2": "PLC Interface"
+                },
+                "transitData": {
+                    "8": "ActivatePump"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -607.930537376272,
+                    "y": -31.643072134727095
+                }
+            }
+        },
+        "7": {
+            "name": "ActivatePumpMessage",
+            "type": "ConnectionRule",
+            "associated_assets": {
+                "applications": {
+                    "4": "SCADA",
+                    "2": "PLC Interface"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -109.73860033255528,
+                    "y": -71.38336138137088
+                }
+            }
+        },
+        "8": {
+            "name": "ActivatePump",
+            "type": "Data",
+            "associated_assets": {
+                "transitNetwork": {
+                    "6": "Cloud"
+                },
+                "senderApp": {
+                    "4": "SCADA"
+                },
+                "receiverApp": {
+                    "2": "PLC Interface"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -965.9557625145519,
+                    "y": -232.1024447031432
+                }
+            }
+        },
+        "11": {
+            "name": "SCADACVE",
+            "type": "SoftwareVulnerability",
+            "associated_assets": {
+                "application": {
+                    "4": "SCADA"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -161.9443422383339,
+                    "y": -421.90762846302795
+                }
+            }
+        },
+        "18": {
+            "name": "CloudConnection",
+            "type": "ConnectionRule",
+            "associated_assets": {
+                "applications": {
+                    "4": "SCADA",
+                    "2": "PLC Interface"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -954.6192805628107,
+                    "y": 17.04677286719305
+                }
+            }
+        }
+    },
+    "attackers": {
+        "17": {
+            "name": "Attacker:17",
+            "entry_points": {
+                "SCADACVE": {
+                    "asset_id": 11,
+                    "attack_steps": [
+                        "highPrivilegesAchieved"
+                    ]
+                }
+            }
+        }
+    }
+}

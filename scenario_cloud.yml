@@ -1,0 +1,19 @@
+lang_file: org.mal-lang.coreLang-1.0.0.mar
+model_file: archi_cloud.json
+
+rewards:
+    'ActivatePump:successfulDeny': 8
+    
+agents:
+    'Attacker1':
+        type: attacker
+#        agent_class: KeyboardAgent
+        agent_class: BreadthFirstAttacker
+        entry_points:
+            - 'SCADACVE:attemptExploit'
+            
+    'Defender1':
+        type: defender
+        agent_class: PassiveAgent
+        entry_points:
+            - 'CompromisedNetwork:eavesDropDefense'

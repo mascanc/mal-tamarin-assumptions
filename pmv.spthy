@@ -1,0 +1,145 @@
+/*
+ *  Author: 
+ *  Model Name: pmv.spthy
+ *  Status: DEVELOPMENTAL
+ *
+ *  Comments:
+ */
+
+theory iot_device_protocol
+begin
+
+builtins: diffie-hellman
+
+/* 
+ * Create the rules for creating the identities. This is to create
+ * identities. A client, a server, we don't care. 
+ */
+
+ rule create_identities:
+   let
+     /* this is a shortcut to relate, according to DH, the pubkey from the privkey */
+
+   	pubkey = 'g'^~privkey
+   in
+      /* This is used to create identities. Basically I want to have an 
+        identity called A, with a private key and a public key. 
+        Everytime I create an Identity, I want this Identity to be known to the
+        network (e.g., visible to the adversary. 
+		
+		The public key is defined in the let part, while the private key is new
+		fresh (Fr()) and it is defined in the precondition. 
+
+		The ~means that it is a random variable. It is a type definition ~ = random variable
+
+		$A means that it is a public value. 
+        */
+     [Fr(~privkey)]-->[!Identity($A, ~privkey, pubkey), Out(pubkey)] 
+   
+
+/*
+ * This is the client hello. In order to make this transition, 
+ * I need to have some identities: the client, the server. 
+ * So they become preconditions in the state machine. 
+*/
+rule client_hello:
+
+    [!Identity($client, ~clientprivkey, clientpubkey), !Identity($server, ~serverprivkey, serverpubkey)]
+    -->
+    /* After creating the two identities, I want that the client sends the 
+     client_hello message, from the client, to the server, and sends its public key.
+
+     Note, if we don't persist client and server, the scope of the variables in 
+     tamarin are that after the transition, the two identities are lost. 
+     So we add a ! in front, to show that they are persistent facts (and we have to do 
+     in the creation as well */
+    [Out(<'client_hello', $client, $server, clientpubkey>)]
+
+
+rule receive_client_hello_send_server_hello:
+
+/*
+ to receive a message, we need a server (stable) in the precond, and an IN from the network. 
+ NOTA: the client in the precond, does not have a $, as we don't want to restrict to a specific
+ client, but we want to have any client instead. The server has the $, as we wanto to bind it to the
+ identity that we created. 
+*/
+
+/*now we create a sessionkey
+*/ 
+    let 
+	 	sessionkey = clientpubkey^~serverprivkey
+	in
+    
+     [!Identity($server, ~serverprivkey, serverpubkey), In(<'client_hello', client, $server, clientpubkey>)]
+     --[ServerCreateSession($server, client, sessionkey)]-> /* Here I want to let tamarin know the fact that I created the session with this server ($) and any client with a given session key*/
+     /*
+       what I do now: I create a session with the user, and send out to the client
+       my server piblic key.
+
+       The session is between the server to the client, and the session id is
+       computed with the clientpubkey power to the server priv key
+     */
+     [Session($server, client, clientpubkey^~serverprivkey), Out(<'server_hello', $server, client, serverpubkey>)]
+
+
+rule receive_server_hello:
+	/*
+	Here the client receives a server hello. So we need a client 
+	identity, and the message from the server
+	NOTE the dollar. Now it's the client which has the dollar. 
+	*/
+
+	let
+	    sessionkey = serverpubkey^~clientprivkey
+	in
+	[!Identity($client, ~clientprivkey, clientpubkey), In(<'server_hello', server, $client, serverpubkey>)]
+	--[ClientCreateSession($client, server, sessionkey)]-> /* Same event: we want to rais to tamarin that we created a session*/
+	/*
+	* Now we create a session with the server. 
+	*/
+	[Session($client, server, serverpubkey^~clientprivkey)]
+
+
+/*
+  NOW THE SECURITY PROPERTIES
+*/
+
+/**
+ * For all client, server, and session keys, such that 
+ * client creates a session with a session key
+ * and a servercreate a session with the client with a session key
+ * 
+ * then I want that the adversary never learns the session key
+ * 
+ * NOTE that the session keys are diffie-hellman  erent, the might not be the same
+ * between the server and the client
+ */
+
+lemma MITM:
+"
+    All client server sessionkey1 sessionkey2 #i #j . /* For all client, server, session key at time i and j, such that*/
+    (
+    	ClientCreateSession(client, server, sessionkey1) @ #i &
+    	ServerCreateSession(server, client, sessionkey2) @ #j &
+    	#j < #i & /* to say that the client shall establish the session before */
+    	not(client = server) 
+    )
+    ==> not( Ex #k1 #k2 . K(sessionkey1) @ #k1 &  K(sessionkey2) @ #k2) 
+    /* NOT exists a time k where the adversary knows the session key at time k*/
+"
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+

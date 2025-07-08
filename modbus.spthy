@@ -1,0 +1,75 @@
+/*
+ * Author: Massimiliano Masi
+ * Status: RESEARCH
+ *
+ * Comments: Sample protocol used to demonstrate the methodology to map the assumptions to an EA
+ */
+
+ theory scada_modbus_example
+ begin
+ 
+ builtins: diffie-hellman
+
+ /*
+  * Defines the rules of the protocol. We have the sender, A, and the receiver, B
+  */
+ 
+ /* 
+  * In this rule we have the SCADA, A, sending the message to the PLC, $B$, in the public network
+  */
+ rule SCADA_sends_message:
+
+     [ Fr(~nonce) ]
+   --[ Start(~nonce) ]->
+     [ Out(<$A, $B, ~nonce, 'actuate_60'>) ]
+ 
+ /*
+  * In this rule, the PLC receives a message from the public network of "actuation"
+  * Precondition before it sends an ok
+  */
+ rule PLC_receives_and_responds:
+ 	
+ 	[ In(<$A, $B, ~nonce, 'actuate_60'>) ]
+    --[ PLCReceives($A, $B, ~nonce) ]->
+ 	[ Out(<$B, $A, ~nonce, 'ok'>)]
+
+/*
+ * In this rule, the SCADA receives the OK and the protocol terminates
+ */
+rule SCADA_receives_ok:
+	[ In(<$B, $A, ~nonce, 'ok'>)]
+	--[ Finish($B, ~nonce) ]->
+	[ ]
+
+ 
+
+/*
+ * LEMMAS
+ */
+
+/* It exists a trace, at time i, where there is a plc named b, and the trace contains the fact finish */
+ lemma executable:
+ "
+   Ex b nonce1 #i . (Finish(b, nonce1)@i) &
+   Ex a #j . (PLCReceives(a,b, nonce1)@j) &
+   j<i &
+   not(a= b)
+ "
+
+lemma authentic:
+"
+	All a b nonce1 #i #j .
+	(
+		PLCReceives(a, b, nonce1) @ #j &
+		Start(nonce1) @ #i &
+		#j < #i &
+		not(a = b)
+	)
+	==> not ( Ex #k1 . K(nonce1) @ #k1 )
+
+"
+
+
+
+
+ end

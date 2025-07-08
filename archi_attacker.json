@@ -1,0 +1,297 @@
+{
+    "metadata": {
+        "name": "archi_attacker",
+        "langVersion": "1.0.0",
+        "langID": "org.mal-lang.coreLang",
+        "malVersion": "0.1.0-SNAPSHOT",
+        "MAL-Toolbox Version": "0.3.11",
+        "info": "Created by the mal-toolbox model python module."
+    },
+    "assets": {
+        "0": {
+            "name": "PLC",
+            "type": "Hardware",
+            "associated_assets": {
+                "sysExecutedApps": {
+                    "2": "PLC Interface"
+                },
+                "vulnerabilities": {
+                    "10": "HWCVE"
+                },
+                "physicalZones": {
+                    "12": "Field"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -599.0,
+                    "y": 337.0
+                }
+            }
+        },
+        "2": {
+            "name": "PLC Interface",
+            "type": "Application",
+            "associated_assets": {
+                "hostHardware": {
+                    "0": "PLC"
+                },
+                "networks": {
+                    "6": "CompromisedNetwork"
+                },
+                "appConnections": {
+                    "7": "ActivatePumpMessage"
+                },
+                "vulnerabilities": {
+                    "9": "CVE"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -599.0,
+                    "y": 206.0
+                }
+            }
+        },
+        "3": {
+            "name": "Server",
+            "type": "Hardware",
+            "associated_assets": {
+                "sysExecutedApps": {
+                    "4": "SCADA"
+                },
+                "vulnerabilities": {
+                    "13": "SCADAHWCVE"
+                },
+                "physicalZones": {
+                    "15": "DataCenter"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -615.0,
+                    "y": -326.0
+                }
+            }
+        },
+        "4": {
+            "name": "SCADA",
+            "type": "Application",
+            "associated_assets": {
+                "hostHardware": {
+                    "3": "Server"
+                },
+                "networks": {
+                    "6": "CompromisedNetwork"
+                },
+                "appConnections": {
+                    "7": "ActivatePumpMessage"
+                },
+                "vulnerabilities": {
+                    "11": "SCADACVE"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -606.0127754287129,
+                    "y": -151.50319385717822
+                }
+            }
+        },
+        "6": {
+            "name": "CompromisedNetwork",
+            "type": "Network",
+            "associated_assets": {
+                "applications": {
+                    "4": "SCADA",
+                    "2": "PLC Interface"
+                },
+                "transitData": {
+                    "8": "ActivatePump"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -607.930537376272,
+                    "y": -31.643072134727095
+                }
+            }
+        },
+        "7": {
+            "name": "ActivatePumpMessage",
+            "type": "ConnectionRule",
+            "associated_assets": {
+                "applications": {
+                    "4": "SCADA",
+                    "2": "PLC Interface"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -951.209925989372,
+                    "y": 133.28445535536565
+                }
+            }
+        },
+        "8": {
+            "name": "ActivatePump",
+            "type": "Data",
+            "associated_assets": {
+                "transitNetwork": {
+                    "6": "CompromisedNetwork"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -965.9557625145519,
+                    "y": -232.1024447031432
+                }
+            }
+        },
+        "9": {
+            "name": "CVE",
+            "type": "SoftwareVulnerability",
+            "associated_assets": {
+                "application": {
+                    "2": "PLC Interface"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -158.21536067363547,
+                    "y": 194.6528376772606
+                }
+            }
+        },
+        "10": {
+            "name": "HWCVE",
+            "type": "HardwareVulnerability",
+            "associated_assets": {
+                "hardware": {
+                    "0": "PLC"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -152.46207483095785,
+                    "y": 331.77281692774477
+                }
+            }
+        },
+        "11": {
+            "name": "SCADACVE",
+            "type": "SoftwareVulnerability",
+            "associated_assets": {
+                "application": {
+                    "4": "SCADA"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -167.80417041143156,
+                    "y": -189.85843280836258
+                }
+            }
+        },
+        "12": {
+            "name": "Field",
+            "type": "PhysicalZone",
+            "associated_assets": {
+                "hardwareSystems": {
+                    "0": "PLC"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -943.7694994179279,
+                    "y": 330.2339930151339
+                }
+            }
+        },
+        "13": {
+            "name": "SCADAHWCVE",
+            "type": "HardwareVulnerability",
+            "associated_assets": {
+                "hardware": {
+                    "3": "Server"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -166.84528943765196,
+                    "y": -318.3484832948302
+                }
+            }
+        },
+        "15": {
+            "name": "DataCenter",
+            "type": "PhysicalZone",
+            "associated_assets": {
+                "hardwareSystems": {
+                    "3": "Server"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -970.2223515715949,
+                    "y": -326.82072176949947
+                }
+            }
+        }
+    },
+    "attackers": {
+        "14": {
+            "name": "Attacker:14",
+            "entry_points": {
+                "CompromisedNetwork": {
+                    "asset_id": 6,
+                    "attack_steps": [
+                        "adversaryInTheMiddle"
+                    ]
+                },
+                "CVE": {
+                    "asset_id": 9,
+                    "attack_steps": [
+                        "exploit"
+                    ]
+                },
+                "HWCVE": {
+                    "asset_id": 10,
+                    "attack_steps": [
+                        "exploit"
+                    ]
+                },
+                "Field": {
+                    "asset_id": 12,
+                    "attack_steps": [
+                        "gainPhysicalAccess"
+                    ]
+                },
+                "ActivatePumpMessage": {
+                    "asset_id": 7,
+                    "attack_steps": [
+                        "successfulAccessNetworksUninspected"
+                    ]
+                },
+                "SCADACVE": {
+                    "asset_id": 11,
+                    "attack_steps": [
+                        "exploit"
+                    ]
+                },
+                "SCADAHWCVE": {
+                    "asset_id": 13,
+                    "attack_steps": [
+                        "exploit"
+                    ]
+                },
+                "DataCenter": {
+                    "asset_id": 15,
+                    "attack_steps": [
+                        "gainPhysicalAccess"
+                    ]
+                }
+            }
+        }
+    }
+}

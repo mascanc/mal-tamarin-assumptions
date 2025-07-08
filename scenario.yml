@@ -1,0 +1,20 @@
+lang_file: org.mal-lang.coreLang-1.0.0.mar
+model_file: archi_attacker.json
+
+rewards:
+    'ActivatePump:successfulDeny': 8
+    'PLC:bypassHardwareModificationsProtection': 10
+agents:
+    'Attacker1':
+        type: attacker
+#        agent_class: KeyboardAgent
+        agent_class: BreadthFirstAttacker
+        entry_points:
+            - 'CVE:attemptExploit'
+            - 'HWCVE:attemptExploit'
+            
+    'Defender1':
+        type: defender
+        agent_class: PassiveAgent
+        entry_points:
+            - 'CompromisedNetwork:eavesDropDefense'

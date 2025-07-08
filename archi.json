@@ -1,0 +1,117 @@
+{
+    "metadata": {
+        "name": "archi",
+        "langVersion": "1.0.0",
+        "langID": "org.mal-lang.coreLang",
+        "malVersion": "0.1.0-SNAPSHOT",
+        "MAL-Toolbox Version": "0.3.11",
+        "info": "Created by the mal-toolbox model python module."
+    },
+    "assets": {
+        "0": {
+            "name": "PLC",
+            "type": "Hardware",
+            "associated_assets": {
+                "sysExecutedApps": {
+                    "2": "PLC Interface"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -599.0,
+                    "y": 337.0
+                }
+            }
+        },
+        "2": {
+            "name": "PLC Interface",
+            "type": "Application",
+            "associated_assets": {
+                "hostHardware": {
+                    "0": "PLC"
+                },
+                "networks": {
+                    "6": "CompromisedNetwork"
+                },
+                "appConnections": {
+                    "7": "ActivatePump"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -599.0,
+                    "y": 206.0
+                }
+            }
+        },
+        "3": {
+            "name": "Server",
+            "type": "Hardware",
+            "associated_assets": {
+                "sysExecutedApps": {
+                    "4": "SCADA"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -615.0,
+                    "y": -326.0
+                }
+            }
+        },
+        "4": {
+            "name": "SCADA",
+            "type": "Application",
+            "associated_assets": {
+                "hostHardware": {
+                    "3": "Server"
+                },
+                "networks": {
+                    "6": "CompromisedNetwork"
+                },
+                "appConnections": {
+                    "7": "ActivatePump"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -615.0,
+                    "y": -182.0
+                }
+            }
+        },
+        "6": {
+            "name": "CompromisedNetwork",
+            "type": "Network",
+            "associated_assets": {
+                "applications": {
+                    "2": "PLC Interface",
+                    "4": "SCADA"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -607.0,
+                    "y": -16.0
+                }
+            }
+        },
+        "7": {
+            "name": "ActivatePump",
+            "type": "ConnectionRule",
+            "associated_assets": {
+                "applications": {
+                    "2": "PLC Interface",
+                    "4": "SCADA"
+                }
+            },
+            "extras": {
+                "position": {
+                    "x": -956.0,
+                    "y": -12.0
+                }
+            }
+        }
+    },
+    "attackers": {}
+}
